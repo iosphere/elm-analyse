@@ -31,6 +31,7 @@ import Json.Decode as JD exposing (Value)
 import List.Extra as List
 import Navigation exposing (Location)
 import WebSocket as WS
+import Client.Graph.Histogram as Histogram
 
 
 -- port for sending strings out to JavaScript
@@ -150,6 +151,8 @@ view m =
             , Html.div [ Html.class "row" ]
                 (widgets maybeGraph)
             , Html.div [ Html.class "row" ]
+                (histogram maybeGraph)
+            , Html.div [ Html.class "row" ]
                 [ Panel.viewWithFooter Panel.WidthFull
                     "Graph"
                     (Panel.documentationButton "ModuleGraph.md")
@@ -161,6 +164,16 @@ view m =
                     |> Maybe.withDefault (Html.text "")
                 ]
             ]
+
+
+histogram : Maybe (Graph Node) -> List (Html msg)
+histogram maybeGraph =
+    case maybeGraph of
+        Just graph ->
+            [ Histogram.view graph ]
+
+        Nothing ->
+            [ Html.text "" ]
 
 
 widgets : Maybe (Graph Node) -> List (Html msg)
